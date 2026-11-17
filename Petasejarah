@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jelajah Benteng Nusantara: Edisi Ular Tangga Sejarah</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font: Fredoka -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        parchment: '#fdf6e2',
+                        parchmentDark: '#f4ebd0',
+                        wood: '#5c3a21',
+                        woodDark: '#3c2415',
+                        armyGreen: '#2c5e3b',
+                        armyDark: '#1b3b25',
+                        goldAccent: '#d4af37',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+            background-color: #f4ebd0;
+            background-image: radial-gradient(#e2d3aa 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+        .parchment-box {
+            background-color: #fdf6e2;
+            border: 4px solid #5c3a21;
+            box-shadow: 0 10px 25px -5px rgba(92, 58, 33, 0.3), 0 8px 10px -6px rgba(92, 58, 33, 0.3);
+        }
+        .btn-wood {
+            background: linear-gradient(to bottom, #734c2d, #5c3a21);
+            border: 2px solid #3c2415;
+            box-shadow: 0 4px 0 #3c2415;
+            transition: all 0.1s ease;
+        }
+        .btn-wood:hover {
+            background: linear-gradient(to bottom, #845733, #734c2d);
+            transform: translateY(-1px);
+            box-shadow: 0 5px 0 #3c2415;
+        }
+        .btn-wood:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #3c2415;
+        }
+        .dice-container {
+            perspective: 1000px;
+        }
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            20% { transform: translate(-3px, 0px) rotate(-5deg); }
+            40% { transform: translate(1px, -1px) rotate(4deg); }
+            60% { transform: translate(-1px, 2px) rotate(0deg); }
+            80% { transform: translate(3px, 1px) rotate(2deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .shake-anim {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-woodDark flex flex-col justify-between p-3 sm:p-6">
+
+    <!-- Header / Navbar -->
+    <header class="w-full max-w-5xl mx-auto mb-4 text-center">
+        <div class="inline-block bg-wood text-parchment px-6 py-2 rounded-2xl shadow-md border-2 border-goldAccent">
+            <h1 class="text-xl sm:text-3xl font-bold tracking-wide text-goldAccent flex items-center justify-center gap-2">
+                <i class="fa-solid fa-map-location-dot"></i> Jelajah Benteng Nusantara
+            </h1>
+            <p class="text-xs sm:text-sm text-parchmentDark">Edisi Ular Tangga & Kuis Sejarah Perjuangan Indonesia</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-5xl mx-auto flex-grow flex items-center justify-center">
+
+        <!-- 1. HALAMAN AWAL (START SCREEN) -->
+        <div id="startScreen" class="w-full max-w-xl parchment-box rounded-3xl p-6 sm:p-8">
+            <div class="text-center mb-6">
+                <div class="w-20 h-20 mx-auto bg-armyGreen text-goldAccent rounded-full flex items-center justify-center text-3xl shadow-inner border-2 border-goldAccent mb-3">
+                    <i class="fa-solid fa-chess-rook"></i>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-woodDark">Selamat Datang, Penjelajah!</h2>
+                <p class="text-sm text-gray-700 mt-1">Masukkan identitas tim penjelajahmu sebelum memulai ekspedisi melintasi benteng-benteng bersejarah Indonesia.</p>
+            </div>
+
+            <form id="playerForm" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="bg-amber-100/70 p-4 rounded-2xl border border-amber-300">
+                        <label class="block text-sm font-bold text-red-700 mb-1">
+                            <i class="fa-solid fa-chess-pawn"></i> Pemain 1 (Pion Merah)
+                        </label>
+                        <input type="text" id="player1Name" required placeholder="Nama Pemain 1" 
+                            class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 bg-white text-sm">
+                    </div>
+                    <div class="bg-amber-100/70 p-4 rounded-2xl border border-amber-300">
+                        <label class="block text-sm font-bold text-blue-700 mb-1">
+                            <i class="fa-solid fa-chess-pawn"></i> Pemain 2 (Pion Biru)
+                        </label>
+                        <input type="text" id="player2Name" required placeholder="Nama Pemain 2" 
+                            class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-sm">
+                    </div>
+                </div>
+
+                <div class="bg-amber-100/70 p-4 rounded-2xl border border-amber-300">
+                    <label class="block text-sm font-bold text-wood mb-1">
+                        <i class="fa-solid fa-school"></i> Kelas / Nama Tim / Sekolah
+                    </label>
+                    <input type="text" id="teamInfo" required placeholder="Contoh: Kelas 8A - SMP N 1 Nusantara" 
+                        class="w-full px-3 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-600 bg-white text-sm">
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-3">
+                    <button type="submit" class="flex-1 btn-wood text-white font-bold py-3 px-6 rounded-2xl text-center shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-play text-goldAccent"></i> Mulai Penjelajahan
+                    </button>
+                    <button type="button" id="btnViewLeaderboard" onclick="showLeaderboard()" class="bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-6 rounded-2xl text-center shadow-md transition flex items-center justify-center gap-2 border border-amber-900">
+                        <i class="fa-solid fa-trophy text-goldAccent"></i> Leaderboard
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 2. HALAMAN PERMAINAN (GAME SCREEN) -->
+        <div id="gameScreen" class="w-full max-w-5xl hidden flex flex-col lg:flex-row gap-6 items-start">
+            
+            <!-- Papan Permainan (6x6) -->
+            <div class="w-full lg:w-7/12 parchment-box rounded-3xl p-4 sm:p-6 flex flex-col items-center">
+                <div class="flex justify-between w-full mb-3 px-2 items-center">
+                    <span class="text-xs sm:text-sm font-bold bg-amber-200 px-3 py-1 rounded-full border border-amber-400">
+                        <i class="fa-solid fa-map"></i> Peta Rute 36 Kotak Benteng
+                    </span>
+                    <span id="currentTurnInfo" class="text-xs sm:text-sm font-bold px-3 py-1 rounded-full text-white bg-red-600 animate-pulse">
+                        Giliran: Pemain 1
+                    </span>
+                </div>
+
+                <!-- Grid Papan 6x6 -->
+                <div id="boardGrid" class="grid grid-cols-6 gap-1.5 sm:gap-2 w-full max-w-md aspect-square bg-[#3c2415] p-2.5 rounded-2xl shadow-inner border-2 border-wood">
+                    <!-- Dinamik generate oleh JS -->
+                </div>
+            </div>
+
+            <!-- Panel Kontrol, Status, & Aksi -->
+            <div class="w-full lg:w-5/12 flex flex-col gap-4">
+                
+                <!-- Status Pemain & Skor -->
+                <div class="parchment-box rounded-3xl p-4 sm:p-5">
+                    <h3 class="font-bold text-base mb-3 text-center border-b border-amber-300 pb-2 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-users text-armyGreen"></i> Status Penjelajah
+                    </h3>
+                    <div class="grid grid-cols-2 gap-3 mb-4">
+                        <div id="p1Card" class="bg-red-50 border-2 border-red-300 p-3 rounded-2xl text-center transition-all">
+                            <div class="font-bold text-red-700 text-sm truncate" id="p1Display">Pemain 1</div>
+                            <div class="text-xs text-gray-600">Posisi: <span id="p1Pos" class="font-bold">1</span></div>
+                            <div class="text-xs text-red-600 font-semibold mt-1">Pion Merah 🔴</div>
+                        </div>
+                        <div id="p2Card" class="bg-blue-50 border-2 border-blue-200 p-3 rounded-2xl text-center transition-all">
+                            <div class="font-bold text-blue-700 text-sm truncate" id="p2Display">Pemain 2</div>
+                            <div class="text-xs text-gray-600">Posisi: <span id="p2Pos" class="font-bold">1</span></div>
+                            <div class="text-xs text-blue-600 font-semibold mt-1">Pion Biru 🔵</div>
+                        </div>
+                    </div>
+
+                    <!-- Area Dadu & Tombol Kocok -->
+                    <div class="bg-amber-100/80 rounded-2xl p-4 text-center border border-amber-300 flex flex-col items-center">
+                        <div class="text-xs font-bold text-wood mb-2 uppercase tracking-wide">Lempar Dadu Ekspedisi</div>
+                        <div id="diceBox" class="w-16 h-16 bg-white border-2 border-wood rounded-2xl shadow-md flex items-center justify-center text-3xl font-bold text-wood mb-3">
+                            🎲
+                        </div>
+                        <div id="diceMessage" class="text-xs font-semibold text-gray-700 mb-3 h-5">Tekan tombol untuk mengocok dadu!</div>
+                        <button id="btnRoll" onclick="rollDice()" class="w-full btn-wood text-white font-bold py-3 px-4 rounded-xl shadow-md flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-dice text-goldAccent text-lg"></i> Kocok Dadu Sekarang
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Box Benteng Terakhir / Log Perjalanan -->
+                <div class="parchment-box rounded-3xl p-4 flex-grow">
+                    <h4 class="font-bold text-xs text-wood uppercase tracking-wider mb-2 flex items-center gap-1">
+                        <i class="fa-solid fa-book-open text-amber-700"></i> Jurnal Sejarah Nusantara
+                    </h4>
+                    <div id="gameLog" class="bg-white/80 border border-amber-200 rounded-xl p-3 text-xs text-gray-700 h-28 overflow-y-auto space-y-1">
+                        <div>Selamat datang di Jelajah Benteng Nusantara! Silakan kocok dadu untuk memulai perjalanan dari Benteng Vredeburg.</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 3. MODAL KUIS & NARASI SPESIAL -->
+        <div id="eventModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+            <div class="parchment-box rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl animate-bounce-in relative">
+                <div id="modalHeaderIcon" class="w-16 h-16 mx-auto bg-amber-600 text-white rounded-full flex items-center justify-center text-2xl shadow-md border-2 border-goldAccent mb-4">
+                    <i class="fa-solid fa-question"></i>
+                </div>
+                <h3 id="modalTitle" class="text-xl font-bold text-center text-woodDark mb-2">Uji Pengetahuan Sejarah</h3>
+                <p id="modalSubtitle" class="text-xs text-center text-gray-600 mb-4 font-medium">Jawab pertanyaan berikut untuk menguji wawasan perjuangan nasional!</p>
+                
+                <div id="modalContentArea" class="space-y-4">
+                    <!-- Diisi dinamis oleh JS (soal atau narasi ular/tangga) -->
+                </div>
+
+                <div id="modalActionArea" class="mt-6 flex justify-end">
+                    <!-- Tombol aksi modal -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. HALAMAN GAME OVER (VICTORY SCREEN) -->
+        <div id="gameOverScreen" class="w-full max-w-xl parchment-box rounded-3xl p-6 sm:p-8 hidden text-center">
+            <div class="w-20 h-20 mx-auto bg-goldAccent text-woodDark rounded-full flex items-center justify-center text-4xl shadow-lg border-4 border-amber-800 mb-4 animate-pulse">
+                <i class="fa-solid fa-trophy"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-woodDark mb-1">Misi Ekspedisi Selesai!</h2>
+            <p id="winnerAnnouncement" class="text-lg font-bold text-red-700 mb-4">Pemain 1 Menangkan Penjelajahan!</p>
+
+            <div class="bg-amber-100/80 rounded-2xl p-4 border border-amber-300 text-left mb-6 space-y-2 text-sm">
+                <div class="font-bold text-wood border-b border-amber-300 pb-1 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-bar"></i> Statistik Ekspedisi Tim:
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-700">Tim / Kelas:</span>
+                    <span id="statTeam" class="font-bold text-wood"> Kelas 8A</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-700">Pemenang:</span>
+                    <span id="statWinner" class="font-bold text-wood">Pemain 1</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-700">Total Lemparan Dadu:</span>
+                    <span id="statRolls" class="font-bold text-wood">0</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-700">Akurasi Kuis Sejarah:</span>
+                    <span id="statAccuracy" class="font-bold text-wood">0%</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="saveScoreAndRestart()" class="flex-1 btn-wood text-white font-bold py-3 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk text-goldAccent"></i> Simpan Skor & Main Lagi
+                </button>
+                <button onclick="location.reload()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-right"></i> Beranda Utama
+                </button>
+            </div>
+        </div>
+
+        <!-- 5. HALAMAN LEADERBOARD -->
+        <div id="leaderboardScreen" class="w-full max-w-xl parchment-box rounded-3xl p-6 sm:p-8 hidden">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 mx-auto bg-amber-600 text-goldAccent rounded-full flex items-center justify-center text-3xl shadow-inner border-2 border-goldAccent mb-2">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-woodDark">Podium Penjelajah Sejarah</h2>
+                <p class="text-xs text-gray-600 mt-1">Daftar skor penjelajah terbaik yang tersimpan di perangkat ini.</p>
+            </div>
+
+            <div class="bg-white/80 rounded-2xl border border-amber-300 overflow-hidden mb-6 max-h-72 overflow-y-auto">
+                <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                    <thead>
+                        <tr class="bg-amber-200 text-woodDark font-bold border-b border-amber-300">
+                            <th class="p-3 text-center w-12">#</th>
+                            <th class="p-3">Pemenang / Tim</th>
+                            <th class="p-3 text-center">Lemparan</th>
+                            <th class="p-3 text-right">Tanggal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardTableBody">
+                        <!-- Diisi JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-center">
+                <button onclick="backToStart()" class="btn-wood text-white font-bold py-3 px-8 rounded-2xl shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-arrow-left text-goldAccent"></i> Kembali ke Beranda
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-5xl mx-auto mt-4 text-center text-xs text-wood opacity-80">
+        Jelajah Benteng Nusantara &copy; 2026 | Media Pembelajaran Interaktif Sejarah Perjuangan Indonesia
+    </footer>
+
+    <!-- Script Game Logika & Bank Soal -->
+    <script>
+        // --- BANK SOAL SEJARAH & PETA (30+ SOAL) ---
+        const questionBank = [
+            {
+                question: "Benteng Vredeburg yang terletak di titik nol kilometer Yogyakarta dibangun pada masa kolonial Belanda dengan fungsi awal sebagai pertahanan. Di manakah letak geografis benteng ini?",
+                options: ["Kota Yogyakarta, D.I. Yogyakarta", "Kota Surakarta, Jawa Tengah", "Kota Semarang, Jawa Tengah", "Kota Magelang, Jawa Tengah"],
+                answer: 0,
+                explanation: "Benteng Vredeburg terletak strategis di jantung Kota Yogyakarta, dekat Malioboro, yang menjadi saksi bisu berbagai peristiwa penting termasuk Serangan Umum 1 Maret 1949."
+            },
+            {
+                question: "Fort Rotterdam di Makassar, Sulawesi Selatan, merupakan benteng peninggalan Kerajaan Gowa-Tallo sebelum direbut Belanda. Siapakah Sultan Gowa yang terkenal memimpin perlawanan gigih?",
+                options: ["Sultan Hasanuddin", "Sultan Ageng Tirtayasa", "Sultan Iskandar Muda", "Pangeran Diponegoro"],
+                answer: 0,
+                explanation: "Sultan Hasanuddin dijuluki 'Ayam Jantan dari Timur' karena keberaniannya memimpin perlawanan terhadap VOC di Sulawesi."
+            },
+            {
+                question: "Perang Diponegoro (Java War) berkobar pada tahun 1825–1830. Di manakah pusat gerilya Pangeran Diponegoro melawan Belanda?",
+                options: ["Gua Selarong, Yogyakarta", "Rawa Pening, Semarang", "Benteng Duurstede, Maluku", "Surabaya, Jawa Timur"],
+                answer: 0,
+                explanation: "Gua Selarong di Bantul, Yogyakarta, dijadikan markas pertahanan dan strategi gerilya utama oleh Pangeran Diponegoro."
+            },
+            {
+                question: "Benteng Duurstede terletak di pulau Saparua, Maluku. Benteng ini menjadi saksi perlawanan heroik rakyat Maluku yang dipimpin oleh...",
+                options: ["Kapitan Pattimura (Thomas Matulessy)", "Sultan Hasanuddin", "Pangeran Antasari", "Teuku Umar"],
+                answer: 0,
+                explanation: "Kapitan Pattimura memimpin perlawanan rakyat Saparua dan berhasil merebut Benteng Duurstede dari tangan Belanda pada tahun 1817."
+            },
+            {
+                question: "Pertempuran 10 November 1945 di Surabaya melahirkan Hari Pahlawan. Siapakah tokoh orator ulung yang membakar semangat pemuda Surabaya melalui radio?",
+                options: ["Bung Tomo (Sutomo)", "Soekarno", "Mohammad Hatta", "Jenderal Soedirman"],
+                answer: 0,
+                explanation: "Bung Tomo membakar semangat juang rakyat Surabaya lewat siaran radio dengan pekikan takbir dan seruan 'Merdeka atau Mati!'."
+            },
+            {
+                question: "Peristiwa Bandung Lautan Api pada 26 Maret 1946 melibatkan pembakaran kota oleh pejuang agar tidak dimanfaatkan Sekutu dan NICA. Siapakah tokoh yang memimpin aksi ini?",
+                options: ["A.H. Nasution & Mohammad Toha", "Bung Tomo", "Sutan Sjahrir", "I Gusti Ngurah Rai"],
+                answer: 0,
+                explanation: "Para pejuang bersama rakyat Bandung sengaja membumihanguskan kota selatan Bandung dalam peristiwa Bandung Lautan Api."
+            },
+            {
+                question: "Benteng Pendem Cilacap di Jawa Tengah dibangun oleh pemerintah kolonial Belanda. Apa fungsi utama benteng bawah tanah ini pada masa Perang Dunia II?",
+                options: ["Benteng pertahanan pantai militer Jepang & Belanda", "Istana gubernur jenderal", "Gudang rempah-rempah VOC", "Markas diplomasi"],
+                answer: 0,
+                explanation: "Benteng Pendem adalah benteng pertahanan pantai strategis yang dikuasai secara bergantian oleh Belanda dan Jepang."
+            },
+            {
+                question: "Perjanjian Linggarjati (1946) adalah perundingan diplomasi antara Indonesia dan Belanda. Di manakah lokasi perundingan bersejarah ini diadakan?",
+                options: ["Linggarjati, Kabupaten Kuningan, Jawa Barat", "Jakarta", "Yogyakarta", "Denpasar, Bali"],
+                answer: 0,
+                explanation: "Perjanjian Linggarjati dilaksanakan di sebuah bangunan bersejarah di desa Linggarjati, Kuningan, Jawa Barat."
+            },
+            {
+                question: "Perang Puputan Margarana di Bali dipimpin oleh pahlawan nasional yang gugur bersama pasukannya. Siapakah pahlawan tersebut?",
+                options: ["I Gusti Ngurah Rai", "I Gusti Ketut Jelantik", "Untung Surapati", "Sultan Agung"],
+                answer: 0,
+                explanation: "Letkol I Gusti Ngurah Rai memimpin pasukan Ciung Wanara bertempur habis-habisan (puputan) melawan NICA di Margarana, Bali."
+            },
+            {
+                question: "Benteng Marlborough di kota Bengkulu merupakan peninggalan bangsa Inggris di pesisir barat Sumatra. Inggris menyerahkan benteng ini kepada Belanda melalui...",
+                options: ["Traktat London 1824", "Perjanjian Renville", "KMB (Konferensi Meja Bundar)", "Perjanjian Bongaya"],
+                answer: 0,
+                explanation: "Melalui Traktat London 1824, Inggris menukar wilayah Bengkulu dengan Malaka kepada pihak Belanda."
+            },
+            {
+                question: "Siapakah panglima besar Tentara Keamanan Rakyat (TKR) pertama yang memimpin perang gerilya meski dalam keadaan sakit parah?",
+                options: ["Jenderal Soedirman", "Jenderal Gatot Soebroto", "Kolonel Soeharto", "Bung Hatta"],
+                answer: 0,
+                explanation: "Jenderal Soedirman memimpin perang gerilya keluar masuk hutan di Jawa Tengah dan Yogyakarta saat Agresi Militer Belanda II."
+            },
+            {
+                question: "Benteng Van Der Wijck terletak di Gombong, Kebumen, Jawa Tengah. Benteng unik berlantai dua ini berwarna merah dan dibangun pada abad ke-...",
+                options: ["Abad ke-19 (Tahun 1818–1827)", "Abad ke-16", "Abad ke-14", "Abad ke-20"],
+                answer: 0,
+                explanation: "Benteng Van Der Wijck awalnya bernama Fort Cochi dan dibangun pada abad ke-19 sebagai benteng pertahanan militer kolonial."
+            },
+            {
+                question: "Perjanjian Renville ditandatangani di atas kapal perang Amerika Serikat USS Renville pada tahun 1948. Perjanjian ini merugikan Indonesia karena adanya...",
+                options: ["Garis Demarkasi Van Mook", "Pengakuan kedaulatan penuh", "Pembentukan RIS", "Blokade total Selat Malaka"],
+                answer: 0,
+                explanation: "Garis Demarkasi Van Mook memotong wilayah Republik Indonesia dan memaksa TNI melakukan Long March Siliwangi ke Yogyakarta."
+            },
+            {
+                question: "Pahlawan wanita dari Aceh yang memimpin perlawanan gerilya melawan Belanda setelah suaminya (Teuku Umar) gugur adalah...",
+                options: ["Cut Nyak Dien", "Cut Meutia", "R.A. Kartini", "Dewi Sartika"],
+                answer: 0,
+                explanation: "Cut Nyak Dien memimpin perang gerilya di pedalaman hutan Aceh selama bertahun-tahun sebelum tertangkap Belanda."
+            },
+            {
+                question: "Benteng Amsterdam terletak di Hila, Pulau Ambon, Maluku. Benteng ini awalnya dibangun oleh bangsa mana sebelum direbut VOC?",
+                options: ["Spanyol dan Portugis", "Inggris", "Belanda", "Prancis"],
+                answer: 0,
+                explanation: "Benteng Amsterdam awalnya merupakan loji dagang Portugis sebelum direbut dan diperkuat oleh VOC di bawah pimpinan Steven van der Hagen."
+            },
+            {
+                question: "Serangan Umum 1 Maret 1949 di Yogyakarta bertujuan untuk membuktikan kepada dunia internasional bahwa...",
+                options: ["TNI dan Republik Indonesia masih ada dan kuat", "Belanda telah menyerah tanpa syarat", "Ibu kota negara dipindahkan ke Bukittinggi", "Ekonomi Indonesia telah pulih"],
+                answer: 0,
+                explanation: "Serangan Umum 1 Maret 1949 berhasil menduduki Yogyakarta selama 6 jam guna mematahkan propaganda Belanda di PBB."
+            },
+            {
+                question: "Pahlawan nasional wanita asal Aceh yang gugur di medan perang melawan patroli Belanda di Pasai adalah...",
+                options: ["Cut Meutia", "Cut Nyak Dien", "Hajjah Rasul", "Maria Walanda Maramis"],
+                answer: 0,
+                explanation: "Cut Meutia melanjutkan perlawanan bersama Teuku Seupot Tgleh sebelum gugur syahid di tebing Krueng Keureuto."
+            },
+            {
+                question: "Benteng Speelwijk di Banten Lama dibangun untuk mengawasi aktivitas pelabuhan Kesultanan Banten. Siapakah Sultan Banten yang terkenal menentang VOC?",
+                options: ["Sultan Ageng Tirtayasa", "Sultan Hasanuddin", "Sultan Trenggana", "Sultan Iskandar Muda"],
+                answer: 0,
+                explanation: "Sultan Ageng Tirtayasa memajukan Banten sebagai bandar perdagangan internasional dan membangun pertahanan kuat melawan VOC."
+            },
+            {
+                question: "Peristiwa Rengasdengklok pada 17 Agustus 1945 melibatkan penculikan Soekarno-Hatta oleh para pemuda agar...",
+                options: ["Segera memproklamasikan kemerdekaan Indonesia", "Menandatangani kapitulasi Jepang", "Mengungsi ke Australia", "Menemui perwakilan Sekutu"],
+                answer: 0,
+                explanation: "Golongan pemuda mendesak Soekarno dan Hatta agar segera memproklamasikan kemerdekaan terlepas dari pengaruh Jepang."
+            },
+            {
+                question: "Benteng Orange di Ternate, Maluku Utara, adalah benteng pertama yang dibangun oleh bangsa...",
+                options: ["Belanda (Cornelis Matelieff de Jonge)", "Inggris", "Portugis", "Spanyol"],
+                answer: 0,
+                explanation: "Benteng Orange dibangun tahun 1607 oleh Cornelis Matelieff de Jonge dan pernah menjadi pusat VOC sebelum Batavia."
+            },
+            {
+                question: "Sidang BPUPKI pertama yang membahas dasar negara Pancasila dipimpin oleh ketua bernama...",
+                options: ["Dr. K.R.T. Radjiman Wedyodiningrat", "Ir. Soekarno", "Mohammad Yamin", "Mr. Soepomo"],
+                answer: 0,
+                explanation: "Dr. Radjiman Wedyodiningrat memimpin Badan Penyelidik Usaha-Usaha Persiapan Kemerdekaan Indonesia (BPUPKI)."
+            },
+            {
+                question: "Benteng Somba Opu adalah pusat pertahanan maritim Kesultanan Gowa yang terletak di muara Sungai Jeneberang. Di provinsi manakah benteng ini berada?",
+                options: ["Sulawesi Selatan", "Sumatra Barat", "Maluku", "Kalimantan Selatan"],
+                answer: 0,
+                explanation: "Benteng Somba Opu di Makassar, Sulawesi Selatan, merupakan pusat perdagangan rempah dan benteng terkuat Gowa."
+            },
+            {
+                question: "Tokoh pejuang dari Kalimantan Selatan yang memimpin Perang Banjar dengan semboyan 'Haram Manyarah Waja Sampai Kaputing' adalah...",
+                options: ["Pangeran Antasari", "Pangeran Diponegoro", "Sultan Adam", "Demang Lehman"],
+                answer: 0,
+                explanation: "Pangeran Antasari memimpin Kesultanan Banjar melawan penjajahan Belanda dengan semangat pantang menyerah."
+            },
+            {
+                question: "Benteng Vastenburg di Solo (Surakarta) dibangun oleh Gubernur Jenderal Baron van Imhoff pada abad ke-18. Apa tujuan utama pembangunannya?",
+                options: ["Mengontrol Keraton Surakarta dan mengamankan jalur logistik", "Sebagai tempat peristirahatan", "Gudang kopi dan teh", "Markas pasukan Sekutu"],
+                answer: 0,
+                explanation: "Benteng Vastenburg dibangun di jantung kota Solo untuk mengawasi gerak-gerik penguasa istana Jawa saat itu."
+            },
+            {
+                question: "Organisasi pergerakan nasional pertama di Indonesia yang berdiri pada 20 Mei 1908 adalah...",
+                options: ["Budi Utomo", "Sarekat Islam", "Indische Partij", "Perhimpunan Indonesia"],
+                answer: 0,
+                explanation: "Berdirinya Budi Utomo yang diprakarsai oleh Dr. Soetomo dan para mahasiswa STOVIA diperingati sebagai Hari Kebangkitan Nasional."
+            },
+            {
+                question: "Benteng Tolukko di Ternate, Maluku Utara, awalnya dinamakan oleh bangsa Portugis dengan nama...",
+                options: ["Santo Lucas", "San Antonio", "Nossa Senhora", "Fort Amsterdam"],
+                answer: 0,
+                explanation: "Benteng Tolukko dibangun oleh Portugis tahun 1540 dengan nama awal Santo Lucas sebelum dikuasai Belanda."
+            },
+            {
+                question: "Sumpah Pemuda dicetuskan pada tanggal 28 Oktober 1928 dalam Kongres Pemuda II di Jakarta. Siapakah ketua panitia kongres tersebut?",
+                options: ["Sugondo Djojopuspito", "Muhammad Yamin", "Wage Rudolf Supratman", "Amir Sjarifuddin"],
+                answer: 0,
+                explanation: "Sugondo Djojopuspito memimpin Kongres Pemuda II yang melahirkan ikrar Satu Nusa, Satu Bangsa, dan Menjunjung Bahasa Persatuan, Bahasa Indonesia."
+            },
+            {
+                question: "Benteng Marlborough di Bengkulu dinamai untuk mengenang bangsawan Inggris yaitu John Churchill, Earl of...",
+                options: ["Marlborough", "Wellington", "Buckingham", "Oxford"],
+                answer: 0,
+                explanation: "Nama Fort Marlborough diambil dari nama jenderal perang terkenal Inggris, John Churchill, 1st Duke of Marlborough."
+            },
+            {
+                question: "Konferensi Meja Bundar (KMB) yang menghasilkan pengakuan kedaulatan Indonesia oleh Belanda diselenggarakan di kota...",
+                options: ["Den Haag, Belanda", "Jenewa, Swiss", "Jakarta, Indonesia", "Tokyo, Jepang"],
+                answer: 0,
+                explanation: "KMB berlangsung di Den Haag, Belanda, dari 23 Agustus hingga 2 November 1949."
+            },
+            {
+                question: "Benteng Rotterdam di Makassar memiliki bentuk arsitektur yang jika dilihat dari udara menyerupai seekor...",
+                options: ["Penyu (Simbol kekuatan di darat dan air)", "Kuda Laut", "Naga", "Burung Garuda"],
+                answer: 0,
+                explanation: "Bentuk arsitektur Benteng Somba Opu / Rotterdam menyerupai penyu, melambangkan ketahanan Kerajaan Gowa di darat dan laut."
+            }
+        ];
+
+        // --- VARIABEL STATE GAME ---
+        let gameState = {
+            player1: { name: "Pemain 1", pos: 1, color: "red" },
+            player2: { name: "Pemain 2", pos: 1, color: "blue" },
+            team: "Tim Penjelajah Nusantara",
+            turn: 1, // 1 for Player 1, 2 for Player 2
+            totalRolls: 0,
+            correctAnswers: 0,
+            totalQuizzes: 0,
+            gameOver: false
+        };
+
+        // Pemetaan Ular & Tangga (6x6 = 36 kotak)
+        // Tangga (Naik): 3 -> 15, 8 -> 22, 14 -> 28, 20 -> 33
+        // Ular (Turun): 17 -> 5, 26 -> 10, 31 -> 19, 35 -> 25
+        const snakesAndLadders = {
+            3: { type: 'ladder', to: 15, title: "Strategi Benteng Vredeburg!", desc: "Pionmu berhasil menguasai taktik diplomasi di Benteng Vredeburg! Naik ke kotak 15." },
+            8: { type: 'ladder', to: 22, title: "Semangat Fort Duurstede!", desc: "Semangat juang Pattimura membakar barisanmu! Naik pesat ke kotak 22." },
+            14: { type: 'ladder', to: 28, title: "Aliansi Benteng Marlborough!", desc: "Jalur logistik pantai barat berhasil dikuasai! Naik ke kotak 28." },
+            20: { type: 'ladder', to: 33, title: "Kemenangan Van Der Wijck!", desc: "Strategi gerilya gemilang mengantarkanmu mendekati garis akhir! Naik ke kotak 33." },
+            
+            17: { type: 'snake', to: 5, title: "Blokade Kolonial!", desc: "Pasukan blokade musuh menghadang jalur lautmu! Terpaksa mundur ke kotak 5." },
+            26: { type: 'snake', to: 10, title: "Patroli Militer NICA!", desc: "Kamu terjebak razia pasukan patroli kolonial! Mundur ke kotak 10." },
+            31: { type: 'snake', to: 19, title: "Garis Demarkasi Ketat!", desc: "Garis gencatan senjata menahan laju ekspedisimu! Mundur ke kotak 19." },
+            35: { type: 'snake', to: 25, title: "Hambatan Benteng Pertahanan!", desc: "Pertahanan musuh terlalu kuat di ambang kemenangan! Mundur ke kotak 25." }
+        };
+
+        // --- WEB AUDIO API SYNTHESIZER ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            let now = audioCtx.currentTime;
+
+            if (type === 'dice') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.linearRampToValueAtTime(0.01, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (type === 'move') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.1);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.linearRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'success') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(150, now + 0.2);
+                gainNode.gain.setValueAtTime(0.3, now);
+                gainNode.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } else if (type === 'win') {
+                const notes = [523.25, 587.33, 659.25, 698.46, 783.99, 880, 987.77, 1046.50];
+                notes.forEach((freq, idx) => {
+                    let nOsc = audioCtx.createOscillator();
+                    let nGain = audioCtx.createGain();
+                    nOsc.connect(nGain);
+                    nGain.connect(audioCtx.destination);
+                    nOsc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                    nGain.gain.setValueAtTime(0.25, now + idx * 0.12);
+                    nGain.gain.linearRampToValueAtTime(0.01, now + idx * 0.12 + 0.2);
+                    nOsc.start(now + idx * 0.12);
+                    nOsc.stop(now + idx * 0.12 + 0.2);
+                });
+            }
+        }
+
+        // --- INISIALISASI & NAVIGASI SCREEN ---
+        document.getElementById('playerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            gameState.player1.name = document.getElementById('player1Name').value.trim() || "Pemain 1";
+            gameState.player2.name = document.getElementById('player2Name').value.trim() || "Pemain 2";
+            gameState.team = document.getElementById('teamInfo').value.trim() || "Tim Nusantara";
+
+            document.getElementById('p1Display').innerText = gameState.player1.name;
+            document.getElementById('p2Display').innerText = gameState.player2.name;
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+
+            initBoard();
+            updateGameUI();
+            addLog(`Ekspedisi dimulai! Giliran pertama: ${gameState.player1.name} (Pion Merah).`);
+        });
+
+        function showLeaderboard() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('leaderboardScreen').classList.remove('hidden');
+            renderLeaderboardTable();
+        }
+
+        function backToStart() {
+            document.getElementById('leaderboardScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+
+        // --- PEMBUATAN PAPAN 6x6 (BOUSTROPHEDON / SNAKE PATTERN) ---
+        function initBoard() {
+            const boardGrid = document.getElementById('boardGrid');
+            boardGrid.innerHTML = '';
+
+            // 36 kotak (Row 0 s.d. Row 5 dalam grid, nomor kotak 36 turun ke 1)
+            // Kita buat array 6x6
+            for (let r = 0; r < 6; r++) {
+                let rowSquares = [];
+                for (let c = 0; c < 6; c++) {
+                    let squareNum;
+                    let revRow = 5 - r; // Row bawah = 5 (no 1-6), row atas = 0 (no 31-36)
+                    if (revRow % 2 === 0) {
+                        // Genap dari bawah (0, 2, 4): kiri ke kanan
+                        squareNum = revRow * 6 + c + 1;
+                    } else {
+                        // Ganjil dari bawah (1, 3, 5): kanan ke kiri
+                        squareNum = revRow * 6 + (6 - c);
+                    }
+                    rowSquares.push(squareNum);
+                }
+
+                rowSquares.forEach(num => {
+                    const sqDiv = document.createElement('div');
+                    sqDiv.id = `square-${num}`;
+                    sqDiv.className = "relative bg-[#fdf6e2] border border-[#c2b280] rounded-xl p-1 flex flex-col justify-between items-center aspect-square text-[10px] sm:text-xs font-bold text-woodDark shadow-sm";
+                    
+                    // Label nomor kotak
+                    let iconHtml = `<span class="absolute top-1 left-1 text-[9px] text-gray-500 font-bold">${num}</span>`;
+                    
+                    // Keterangan khusus tangga / ular
+                    let specialBadge = "";
+                    if (snakesAndLadders[num]) {
+                        if (snakesAndLadders[num].type === 'ladder') {
+                            specialBadge = `<span class="text-green-700 text-[9px] mt-2 font-extrabold" title="Tangga Naik">📈${snakesAndLadders[num].to}</span>`;
+                            sqDiv.classList.add('bg-green-50');
+                        } else {
+                            specialBadge = `<span class="text-red-700 text-[9px] mt-2 font-extrabold" title="Ular Turun">📉${snakesAndLadders[num].to}</span>`;
+                            sqDiv.classList.add('bg-red-50');
+                        }
+                    } else if (num === 36) {
+                        specialBadge = `<span class="text-goldAccent text-xs mt-2" title="Finish">🏁</span>`;
+                        sqDiv.classList.add('bg-amber-100');
+                    } else {
+                        specialBadge = `<span class="text-gray-400 text-[9px] mt-2">🏰</span>`;
+                    }
+
+                    sqDiv.innerHTML = iconHtml + specialBadge + `<div id="tokens-${num}" class="flex gap-1 items-center justify-center min-h-[16px]"></div>`;
+                    boardGrid.appendChild(sqDiv);
+                });
+            }
+            renderTokens();
+        }
+
+        function renderTokens() {
+            // Bersihkan semua token dulu
+            for (let i = 1; i <= 36; i++) {
+                const container = document.getElementById(`tokens-${i}`);
+                if (container) container.innerHTML = '';
+            }
+
+            // Render Pion 1 (Merah)
+            const p1Container = document.getElementById(`tokens-${gameState.player1.pos}`);
+            if (p1Container) {
+                p1Container.innerHTML += `<div class="w-4 h-4 sm:w-5 sm:h-5 bg-red-600 border-2 border-white rounded-full shadow-md flex items-center justify-center text-[9px] text-white font-bold" title="${gameState.player1.name}">1</div>`;
+            }
+
+            // Render Pion 2 (Biru)
+            const p2Container = document.getElementById(`tokens-${gameState.player2.pos}`);
+            if (p2Container) {
+                p2Container.innerHTML += `<div class="w-4 h-4 sm:w-5 sm:h-5 bg-blue-600 border-2 border-white rounded-full shadow-md flex items-center justify-center text-[9px] text-white font-bold" title="${gameState.player2.name}">2</div>`;
+            }
+        }
+
+        function updateGameUI() {
+            document.getElementById('p1Pos').innerText = gameState.player1.pos;
+            document.getElementById('p2Pos').innerText = gameState.player2.pos;
+
+            const turnInfo = document.getElementById('currentTurnInfo');
+            const p1Card = document.getElementById('p1Card');
+            const p2Card = document.getElementById('p2Card');
+
+            if (gameState.turn === 1) {
+                turnInfo.innerText = `Giliran: ${gameState.player1.name} (Merah)`;
+                turnInfo.className = "text-xs sm:text-sm font-bold px-3 py-1 rounded-full text-white bg-red-600 animate-pulse";
+                p1Card.classList.add('ring-4', 'ring-red-400');
+                p2Card.classList.remove('ring-4', 'ring-blue-400');
+            } else {
+                turnInfo.innerText = `Giliran: ${gameState.player2.name} (Biru)`;
+                turnInfo.className = "text-xs sm:text-sm font-bold px-3 py-1 rounded-full text-white bg-blue-600 animate-pulse";
+                p2Card.classList.add('ring-4', 'ring-blue-400');
+                p1Card.classList.remove('ring-4', 'ring-red-400');
+            }
+        }
+
+        function addLog(message) {
+            const logBox = document.getElementById('gameLog');
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            logBox.innerHTML += `<div class="border-b border-amber-100 pb-1"><span class="text-gray-400">[${time}]</span> ${message}</div>`;
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        // --- MEKANISME LEMPAR DADU & JALAN ---
+        function rollDice() {
+            if (gameState.gameOver) return;
+
+            const btnRoll = document.getElementById('btnRoll');
+            const diceBox = document.getElementById('diceBox');
+            const diceMessage = document.getElementById('diceMessage');
+
+            btnRoll.disabled = true;
+            diceBox.classList.add('shake-anim');
+            playSound('dice');
+            diceMessage.innerText = "Mengocok dadu perjuangan...";
+
+            let rollCount = 0;
+            let rollInterval = setInterval(() => {
+                let tempRoll = Math.floor(Math.random() * 6) + 1;
+                diceBox.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][tempRoll - 1];
+                rollCount++;
+
+                if (rollCount > 10) {
+                    clearInterval(rollInterval);
+                    diceBox.classList.remove('shake-anim');
+                    
+                    let finalRoll = Math.floor(Math.random() * 6) + 1;
+                    diceBox.innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][finalRoll - 1];
+                    diceMessage.innerText = `Dapat angka: ${finalRoll}!`;
+                    
+                    gameState.totalRolls++;
+                    processPlayerMove(finalRoll);
+                }
+            }, 80);
+        }
+
+        function processPlayerMove(steps) {
+            let currentPlayer = gameState.turn === 1 ? gameState.player1 : gameState.player2;
+            let oldPos = currentPlayer.pos;
+            let newPos = oldPos + steps;
+
+            if (newPos > 36) {
+                // Pas atau mantul / pas di 36
+                newPos = 36;
+            }
+
+            currentPlayer.pos = newPos;
+            renderTokens();
+            playSound('move');
+            addLog(`${currentPlayer.name} melangkah dari ${oldPos} ke ${newPos}.`);
+
+            // Cek Kemenangan
+            if (newPos === 36) {
+                triggerGameOver(currentPlayer);
+                return;
+            }
+
+            // Jeda sebentar sebelum trigger kuis atau ular/tangga
+            setTimeout(() => {
+                checkSpecialSquareOrQuiz(currentPlayer, newPos);
+            }, 600);
+        }
+
+        // --- SISTEM KUIS & KOTAK SPESIAL ---
+        function checkSpecialSquareOrQuiz(player, pos) {
+            // Cek apakah kotak adalah ular atau tangga
+            if (snakesAndLadders[pos]) {
+                let special = snakesAndLadders[pos];
+                showModalNarrative(special, player, pos);
+            } else {
+                // Munculkan Kuis Sejarah Interaktif untuk memperkaya edukasi
+                showQuizModal(player);
+            }
+        }
+
+        function showModalNarrative(special, player, pos) {
+            const modal = document.getElementById('eventModal');
+            const headerIcon = document.getElementById('modalHeaderIcon');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const contentArea = document.getElementById('modalContentArea');
+            const actionArea = document.getElementById('modalActionArea');
+
+            if (special.type === 'ladder') {
+                headerIcon.className = "w-16 h-16 mx-auto bg-green-600 text-white rounded-full flex items-center justify-center text-2xl shadow-md border-2 border-goldAccent mb-4";
+                headerIcon.innerHTML = `<i class="fa-solid fa-arrow-trend-up"></i>`;
+                title.innerText = special.title;
+                playSound('success');
+            } else {
+                headerIcon.className = "w-16 h-16 mx-auto bg-red-600 text-white rounded-full flex items-center justify-center text-2xl shadow-md border-2 border-goldAccent mb-4";
+                headerIcon.innerHTML = `<i class="fa-solid fa-arrow-trend-down"></i>`;
+                title.innerText = special.title;
+                playSound('error');
+            }
+
+            subtitle.innerText = `Peristiwa Sejarah di Kotak ${pos}`;
+            contentArea.innerHTML = `
+                <div class="bg-amber-100 p-4 rounded-2xl border border-amber-300 text-sm text-gray-800 leading-relaxed">
+                    <p class="font-bold mb-1 text-wood">${player.name} mendarat di rute bersejarah!</p>
+                    <p>${special.desc}</p>
+                </div>
+            `;
+
+            actionArea.innerHTML = `
+                <button onclick="applySpecialMove(${special.to})" class="btn-wood text-white font-bold py-2.5 px-6 rounded-xl shadow-md text-sm">
+                    Lanjutkan Perjalanan <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            `;
+
+            modal.classList.remove('hidden');
+        }
+
+        function applySpecialMove(targetPos) {
+            let currentPlayer = gameState.turn === 1 ? gameState.player1 : gameState.player2;
+            currentPlayer.pos = targetPos;
+            renderTokens();
+            document.getElementById('eventModal').classList.add('hidden');
+            addLog(`${currentPlayer.name} berpindah ke kotak ${targetPos} melalui jalur khusus.`);
+
+            if (targetPos === 36) {
+                triggerGameOver(currentPlayer);
+            } else {
+                switchTurn();
+            }
+        }
+
+        // --- SISTEM KUIS MODAL ---
+        let currentQuiz = null;
+
+        function showQuizModal(player) {
+            gameState.totalQuizzes++;
+            // Ambil soal acak dari questionBank
+            const randomQuestion = questionBank[Math.floor(Math.random() * questionBank.length)];
+            currentQuiz = randomQuestion;
+
+            const modal = document.getElementById('eventModal');
+            const headerIcon = document.getElementById('modalHeaderIcon');
+            const title = document.getElementById('modalTitle');
+            const subtitle = document.getElementById('modalSubtitle');
+            const contentArea = document.getElementById('modalContentArea');
+            const actionArea = document.getElementById('modalActionArea');
+
+            headerIcon.className = "w-16 h-16 mx-auto bg-amber-600 text-white rounded-full flex items-center justify-center text-2xl shadow-md border-2 border-goldAccent mb-4";
+            headerIcon.innerHTML = `<i class="fa-solid fa-graduation-cap"></i>`;
+            title.innerText = `Tantangan Kuis Sejarah (${player.name})`;
+            subtitle.innerText = "Jawab pertanyaan dengan benar untuk mendapat bonus maju +1 langkah!";
+
+            let optionsHtml = '';
+            randomQuestion.options.forEach((opt, idx) => {
+                optionsHtml += `
+                    <button onclick="answerQuiz(${idx})" class="w-full text-left bg-amber-50 hover:bg-amber-200 border border-amber-300 p-3 rounded-xl text-xs sm:text-sm font-semibold text-woodDark transition shadow-sm flex items-start gap-2">
+                        <span class="bg-amber-200 text-wood px-2 py-0.5 rounded text-xs">${['A','B','C','D'][idx]}</span>
+                        <span>${opt}</span>
+                    </button>
+                `;
+            });
+
+            contentArea.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border border-amber-300 text-xs sm:text-sm text-gray-800 font-medium mb-3">
+                    ${randomQuestion.question}
+                </div>
+                <div class="space-y-2">
+                    ${optionsHtml}
+                </div>
+            `;
+
+            actionArea.innerHTML = ''; // Kosongkan sampai dijawab
+            modal.classList.remove('hidden');
+        }
+
+        function answerQuiz(selectedIndex) {
+            const modal = document.getElementById('eventModal');
+            const contentArea = document.getElementById('modalContentArea');
+            const actionArea = document.getElementById('modalActionArea');
+
+            const isCorrect = selectedIndex === currentQuiz.answer;
+            let currentPlayer = gameState.turn === 1 ? gameState.player1 : gameState.player2;
+
+            if (isCorrect) {
+                gameState.correctAnswers++;
+                playSound('success');
+                currentPlayer.pos = Math.min(36, currentPlayer.pos + 1);
+                renderTokens();
+                addLog(`${currentPlayer.name} MENJAWAB BENAR kuis sejarah! Mendapat bonus maju ke kotak ${currentPlayer.pos}.`);
+
+                contentArea.innerHTML = `
+                    <div class="bg-green-100 border-2 border-green-400 p-4 rounded-2xl text-center">
+                        <div class="text-green-800 font-bold text-base mb-1"><i class="fa-solid fa-circle-check"></i> Jawaban Benar!</div>
+                        <p class="text-xs text-gray-700 mb-2">${currentQuiz.explanation}</p>
+                        <p class="text-xs font-bold text-green-700">Bonus: Pion maju +1 langkah!</p>
+                    </div>
+                `;
+            } else {
+                playSound('error');
+                addLog(`${currentPlayer.name} menjawab salah kuis sejarah.`);
+                contentArea.innerHTML = `
+                    <div class="bg-red-100 border-2 border-red-300 p-4 rounded-2xl text-center">
+                        <div class="text-red-800 font-bold text-base mb-1"><i class="fa-solid fa-circle-xmark"></i> Jawaban Kurang Tepat!</div>
+                        <p class="text-xs text-gray-700 mb-2">Jawaban yang benar adalah: <b>${currentQuiz.options[currentQuiz.answer]}</b></p>
+                        <p class="text-xs text-gray-600">${currentQuiz.explanation}</p>
+                    </div>
+                `;
+            }
+
+            actionArea.innerHTML = `
+                <button onclick="closeQuizModal(${currentPlayer.pos === 36})" class="btn-wood text-white font-bold py-2.5 px-6 rounded-xl shadow-md text-sm">
+                    Lanjutkan Permainan <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            `;
+        }
+
+        function closeQuizModal(isWin) {
+            document.getElementById('eventModal').classList.add('hidden');
+            if (isWin) {
+                let currentPlayer = gameState.turn === 1 ? gameState.player1 : gameState.player2;
+                triggerGameOver(currentPlayer);
+            } else {
+                switchTurn();
+            }
+        }
+
+        function switchTurn() {
+            gameState.turn = gameState.turn === 1 ? 2 : 1;
+            updateGameUI();
+            document.getElementById('btnRoll').disabled = false;
+            document.getElementById('diceMessage').innerText = "Silakan kocok dadu!";
+        }
+
+        // --- GAME OVER & LEADERBOARD ---
+        function triggerGameOver(winner) {
+            gameState.gameOver = true;
+            playSound('win');
+            addLog(`PERMAINAN SELESAI! ${winner.name} keluar sebagai pemenang penjelajahan!`);
+
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+
+            document.getElementById('winnerAnnouncement').innerText = `${winner.name} (${winner.color === 'red' ? 'Pion Merah' : 'Pion Biru'}) Menangkan Ekspedisi!`;
+            document.getElementById('statTeam').innerText = gameState.team;
+            document.getElementById('statWinner').innerText = winner.name;
+            document.getElementById('statRolls').innerText = gameState.totalRolls;
+
+            let accuracy = gameState.totalQuizzes > 0 ? Math.round((gameState.correctAnswers / gameState.totalQuizzes) * 100) : 0;
+            document.getElementById('statAccuracy').innerText = `${accuracy}% (${gameState.correctAnswers}/${gameState.totalQuizzes} benar)`;
+        }
+
+        function saveScoreAndRestart() {
+            let leaderboards = JSON.parse(localStorage.getItem('bentengNusantaraLB') || '[]');
+            let accuracy = gameState.totalQuizzes > 0 ? Math.round((gameState.correctAnswers / gameState.totalQuizzes) * 100) : 0;
+            
+            let winnerName = gameState.player1.pos === 36 ? gameState.player1.name : gameState.player2.name;
+
+            leaderboards.push({
+                winner: winnerName,
+                team: gameState.team,
+                rolls: gameState.totalRolls,
+                accuracy: accuracy,
+                date: new Date().toLocaleDateString('id-ID')
+            });
+
+            // Urutkan berdasarkan lemparan paling sedikit, lalu akurasi tertinggi
+            leaderboards.sort((a, b) => {
+                if (a.rolls !== b.rolls) return a.rolls - b.rolls;
+                return b.accuracy - a.accuracy;
+            });
+
+            // Simpan top 10
+            localStorage.setItem('bentengNusantaraLB', JSON.stringify(leaderboards.slice(0, 10)));
+
+            // Tampilkan leaderboard
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('leaderboardScreen').classList.remove('hidden');
+            renderLeaderboardTable();
+        }
+
+        function renderLeaderboardTable() {
+            let leaderboards = JSON.parse(localStorage.getItem('bentengNusantaraLB') || '[]');
+            const tbody = document.getElementById('leaderboardTableBody');
+            tbody.innerHTML = '';
+
+            if (leaderboards.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-gray-500">Belum ada data skor tersimpan.</td></tr>`;
+                return;
+            }
+
+            leaderboards.forEach((item, index) => {
+                let badgeColor = index === 0 ? 'text-yellow-600 bg-yellow-100' : index === 1 ? 'text-gray-600 bg-gray-100' : index === 2 ? 'text-amber-700 bg-amber-100' : 'text-gray-700';
+                tbody.innerHTML += `
+                    <tr class="border-b border-amber-200 hover:bg-amber-50">
+                        <td class="p-3 text-center font-bold">
+                            <span class="px-2 py-1 rounded-full ${badgeColor}">#${index + 1}</span>
+                        </td>
+                        <td class="p-3">
+                            <div class="font-bold text-woodDark">${item.winner}</div>
+                            <div class="text-[11px] text-gray-500">${item.team}</div>
+                        </td>
+                        <td class="p-3 text-center font-semibold text-amber-800">${item.rolls} lemparan (${item.accuracy}% kuis)</td>
+                        <td class="p-3 text-right text-xs text-gray-500">${item.date}</td>
+                    </tr>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
